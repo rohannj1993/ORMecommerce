@@ -21,18 +21,49 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
+  Tag.findOne({
+    where:{
+      id:req.params.id
+    },
+    include:[Category,
+      {
+      model:Tag,
+      through:ProductTag
+      }
+    ]
+  })
+  .then((tags)=>res.json(tags))
+  .catch((err)=>res.json(err))
 });
 
 router.post('/', (req, res) => {
   // create a new tag
+  Tag.create(req.body)
+  .then((tag) => res.json(tag))
+  .catch((err) => res.json(err));
+
+
 });
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
+  Tag.update(req.body,{
+    where:{id:req.params.id
+    }
+  })
+  .then((tags)=>res.json(tags))
+  .catch((err)=>res.json(err))
 });
 
 router.delete('/:id', (req, res) => {
   // delete on tag by its `id` value
+  Tag.destroy({
+    where:{
+      id:req.params.id
+    }
+  })
+  .then((tags)=>res.json(tags))
+  .catch((err)=>res.json(err))
 });
 
 module.exports = router;
